@@ -3,12 +3,64 @@ jobs:
   build:
     docker:
       - image: debian:stretch
+
+    environment:
+      ABC: DEV_ABC
+
+    branches:
+      ignore:
+        - develop
+        - /feature-.*/
+
     steps:
       - checkout
+
       - run:
           name: Greeting
           command: echo Hello, world.
+
       - run:
           name: Print the Current Time
           command: date
 
+      - run:
+          name: echo ABC
+          command: echo $ABC
+
+  deploy-stage:
+
+    environment:
+      ABC: STAGING_ABC
+
+    steps:
+      - run:
+          name: Greeting Staging
+          command: echo Hello, world. staging.
+          
+  deploy-prod:
+
+    environment:
+      ABC: PRODUCTION_ABC
+
+    steps:
+      - run:
+          name: Greeting production
+          command: echo Hello, world. production.
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build
+      - deploy-stage:
+          requires:
+            -build
+          filters:
+            branches:
+              only: staging
+      - deploy-prod:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
