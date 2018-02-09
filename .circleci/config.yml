@@ -14,15 +14,12 @@ jobs:
 
     steps:
       - checkout
-
       - run:
           name: Greeting
           command: echo Hello, world.
-
       - run:
           name: Print the Current Time
           command: date
-
       - run:
           name: echo ABC
           command: echo $ABC
@@ -46,21 +43,3 @@ jobs:
       - run:
           name: Greeting production
           command: echo Hello, world. production.
-
-workflows:
-  version: 2
-  build-deploy:
-    jobs:
-      - build
-      - deploy-stage:
-          requires:
-            -build
-          filters:
-            branches:
-              only: staging
-      - deploy-prod:
-          requires:
-            - build
-          filters:
-            branches:
-              only: master
