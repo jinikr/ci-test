@@ -16,7 +16,7 @@ defaults: &defaults
 
 version: 2
 jobs:
-  build:
+  deploy-dev:
     environment:
       ABC: DEV_ABC
 
