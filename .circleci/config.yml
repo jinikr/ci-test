@@ -1,0 +1,52 @@
+defaults: &defaults
+  docker:
+    - image: debian:stretch
+
+  steps:
+    - checkout
+    - run:
+        name: Greeting
+        command: echo Hello, world.
+    - run:
+        name: Print the Current Time
+        command: date
+    - run:
+        name: echo ABC
+        command: echo $ABC
+
+version: 2
+jobs:
+  deploy-dev:
+    environment:
+      ABC: DEV_ABC
+
+    <<: *defaults
+
+  deploy-staging:
+    environment:
+      ABC: STAGING_ABC
+
+    <<: *defaults
+          
+  deploy-production:
+    environment:
+      ABC: PRODUCTION_ABC
+
+    <<: *defaults
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - deploy-dev:
+          filters:
+            branches:
+              only: dev
+      - deploy-staging:
+          filters:
+            branches:
+              only: staging
+      - deploy-production:
+          filters:
+            branches:
+              only: master
