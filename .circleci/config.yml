@@ -25,6 +25,8 @@ jobs:
           command: echo $ABC
 
   deploy-stage:
+    docker:
+      - image: debian:stretch
 
     environment:
       ABC: STAGING_ABC
@@ -35,6 +37,8 @@ jobs:
           command: echo Hello, world. staging.
           
   deploy-prod:
+    docker:
+      - image: debian:stretch
 
     environment:
       ABC: PRODUCTION_ABC
